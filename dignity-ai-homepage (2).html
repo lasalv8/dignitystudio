@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dignity | Human Brand Consultancy</title>
+  <style>
+    :root {
+      --red: #f52020;
+      --red-2: #c41414;
+      --red-3: #1a0000;
+      --cream: #f4eadf;
+      --muted: #c7b8ad;
+      --ink: #14090a;
+      --line: rgba(244, 234, 223, 0.22);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--red-3);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      background-image:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.22), transparent 1px),
+        radial-gradient(circle at 70% 80%, rgba(255,255,255,.14), transparent 1px);
+      background-size: 4px 4px, 7px 7px;
+      mix-blend-mode: screen;
+      z-index: 20;
+    }
+
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 34px;
+      letter-spacing: -.03em;
+      background: linear-gradient(to bottom, rgba(20,0,0,.88), rgba(20,0,0,0));
+    }
+
+    .brand {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -.08em;
+    }
+
+    nav { display: flex; gap: 28px; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+    nav a { opacity: .82; }
+    nav a:hover { opacity: 1; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      align-items: end;
+      padding: 120px 34px 42px;
+      position: relative;
+      overflow: hidden;
+      /* Gradient fallback */
+      background:
+        linear-gradient(180deg, rgba(26,0,0,.18) 0%, rgba(26,0,0,.88) 74%, #100000 100%),
+        radial-gradient(circle at 65% 35%, rgba(245,32,32,.82), transparent 33%),
+        linear-gradient(135deg, var(--red), var(--red-3));
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1800&q=80');
+      background-size: cover;
+      background-position: center 30%;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    .hero-bg.loaded { opacity: 1; }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(20,0,0,.38) 0%, rgba(20,0,0,.72) 55%, rgba(10,0,0,.96) 100%);
+      mix-blend-mode: multiply;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 92px 34px 92px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 1180px;
+      z-index: 3;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      max-width: 1080px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 500;
+      font-size: clamp(58px, 10vw, 150px);
+      line-height: .88;
+      letter-spacing: -.08em;
+    }
+
+    .hero-row {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 34px;
+      align-items: end;
+      max-width: 1060px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 25px);
+      line-height: 1.25;
+      max-width: 720px;
+    }
+
+    .button {
+      border: 1px solid var(--cream);
+      border-radius: 999px;
+      padding: 14px 22px;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .12em;
+      white-space: nowrap;
+      transition: .2s ease;
+    }
+    .button:hover { background: var(--cream); color: var(--ink); }
+
+    section { padding: 86px 34px; }
+
+    /* ── INTRO ── */
+    .intro {
+      background: var(--cream);
+      color: var(--ink);
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .intro h2, .work h2, .manifesto h2, .contact h2 {
+      font-family: Georgia, serif;
+      font-size: clamp(40px, 6vw, 84px);
+      letter-spacing: -.06em;
+      line-height: .94;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .intro p {
+      font-size: 22px;
+      line-height: 1.32;
+      margin-top: 0;
+    }
+
+    /* ── PHOTO STRIP ── */
+    .photo-strip {
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      background: #0a0000;
+    }
+
+    .strip-photo {
+      height: 320px;
+      position: relative;
+      overflow: hidden;
+      /* gradient fallbacks per slot */
+    }
+    .strip-photo:nth-child(1) { background: linear-gradient(135deg, #3a0000, #f52020 80%); }
+    .strip-photo:nth-child(2) { background: linear-gradient(135deg, #200000, #8a1010); }
+    .strip-photo:nth-child(3) { background: linear-gradient(135deg, #f52020, #1a0000); }
+
+    .strip-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0;
+      transition: opacity 1s ease;
+      filter: grayscale(20%) contrast(1.08);
+    }
+    .strip-photo img.loaded { opacity: 1; }
+
+    .strip-photo .strip-tint {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(245,32,32,.18), rgba(10,0,0,.52));
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+
+    /* ── MODULES ── */
+    .modules {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 0;
+    }
+
+    .module {
+      background: #180000;
+      min-height: 360px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .module span { color: var(--muted); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+    .module h3 { font-family: Georgia, serif; font-size: 44px; letter-spacing: -.05em; line-height: .9; margin: 0; }
+    .module p { color: var(--muted); line-height: 1.4; max-width: 360px; }
+
+    /* ── WORK / CASE CARDS ── */
+    .work { background: #0e0000; }
+
+    .case-grid {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .case {
+      min-height: 430px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+      /* Gradient fallback */
+      background: linear-gradient(135deg, #3a0000, #100000);
+    }
+
+    .case-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      filter: grayscale(30%) contrast(1.1);
+    }
+    .case-bg.loaded { opacity: 1; }
+
+    .case-tint {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(10,0,0,.82) 100%);
+    }
+
+    .case-body { position: relative; z-index: 2; }
+    .case h3 { font-family: Georgia, serif; font-size: 54px; letter-spacing: -.06em; margin: 0 0 8px; }
+    .case p { color: var(--muted); margin: 0; max-width: 520px; }
+
+    /* ── MANIFESTO ── */
+    .manifesto {
+      background: var(--red);
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 50px;
+      border-top: 1px solid var(--line);
+    }
+
+    .manifesto ul { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+    .manifesto li {
+      padding: 23px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .manifesto li em { color: rgba(244,234,223,.6); font-style: normal; font-size: 14px; text-transform: uppercase; letter-spacing: .12em; }
+
+    /* ── CONTACT ── */
+    .contact {
+      min-height: 70vh;
+      background: var(--cream);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .contact p { font-size: 25px; max-width: 760px; line-height: 1.25; }
+    .contact .button { border-color: var(--ink); display: inline-block; width: fit-content; }
+    .contact .button:hover { background: var(--ink); color: var(--cream); }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      color: rgba(20,9,10,.7);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    @media (max-width: 800px) {
+      header { padding: 18px; }
+      nav { display: none; }
+      .hero { padding: 100px 18px 28px; }
+      .hero::before { inset: 78px 18px 100px; }
+      .hero-row, .intro, .manifesto, .case-grid { grid-template-columns: 1fr; }
+      section { padding: 64px 18px; }
+      .modules { grid-template-columns: 1fr; }
+      .photo-strip { grid-template-columns: 1fr; }
+      .strip-photo { height: 240px; }
+      .case { min-height: 340px; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain"></div>
+
+  <header>
+    <a href="#" class="brand">Dignity</a>
+    <nav>
+      <a href="#mission">Mission</a>
+      <a href="#offers">Practice</a>
+      <a href="#work">Signals</a>
+      <a href="#contact">Start</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO with photo background -->
+    <section class="hero">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="eyebrow">Human brand strategy for the synthetic age</div>
+        <h1>Become impossible to automate.</h1>
+        <div class="hero-row">
+          <p>Dignity helps brands differentiate in an AI-saturated world by becoming more human: more tactile, more local, more storied, more emotionally alive.</p>
+          <a class="button" href="#contact">Work with us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="intro" id="mission">
+      <h2>The future belongs to brands with a pulse.</h2>
+      <div>
+        <p>AI will make everything faster, cheaper, and more average. That means the rarest commercial advantage will be humanity itself.</p>
+        <p>We help companies turn cultural anxiety around automation into brand relevance — not by rejecting technology, but by reclaiming what machines cannot counterfeit: courage, craft, taste, touch, place, and lived experience.</p>
+      </div>
+    </section>
+
+    <!-- PHOTO STRIP -->
+    <div class="photo-strip">
+      <div class="strip-photo">
+        <img id="strip1" alt="Craftsperson at work" loading="lazy" />
+        <div class="strip-tint"></div>
+      </div>
+      <div class="strip-photo">
+        <img id="strip2" alt="Human connection" loading="lazy" />
+        <div class="strip-tint"></div>
+      </div>
+      <div class="strip-photo">
+        <img id="strip3" alt="Analog craft" loading="lazy" />
+        <div class="strip-tint"></div>
+      </div>
+    </div>
+
+    <!-- MODULES -->
+    <section class="modules" id="offers">
+      <article class="module">
+        <span>01 / Positioning</span>
+        <h3>Contrarian brand narratives</h3>
+        <p>We find the cultural tension your brand can own, then turn it into a sharp point of view people actually feel.</p>
+      </article>
+      <article class="module">
+        <span>02 / Campaigns</span>
+        <h3>Human-first creative platforms</h3>
+        <p>From manifesto to launch system, we build campaigns that make analog, embodied, real-world experiences feel newly magnetic.</p>
+      </article>
+      <article class="module">
+        <span>03 / Strategy</span>
+        <h3>AI-era differentiation</h3>
+        <p>We identify where AI commoditizes your category and where your brand can become more distinctive, trusted, and alive.</p>
+      </article>
+    </section>
+
+    <!-- WORK / CASE CARDS with photos -->
+    <section class="work" id="work">
+      <div class="eyebrow">Signals we believe in</div>
+      <h2>People are hungry for what feels real.</h2>
+      <div class="case-grid">
+        <article class="case">
+          <div class="case-bg" id="case1bg"></div>
+          <div class="case-tint"></div>
+          <div class="case-body">
+            <h3>Harley-Davidson</h3>
+            <p>A cultural opening for motorcycles as tactile American rebellion in an increasingly automated world.</p>
+          </div>
+        </article>
+        <article class="case">
+          <div class="case-bg" id="case2bg"></div>
+          <div class="case-tint"></div>
+          <div class="case-body">
+            <h3>Analog Advantage</h3>
+            <p>Brands that restore friction, ritual, craftsmanship, and place can become antidotes to digital sameness.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- MANIFESTO -->
+    <section class="manifesto">
+      <h2>Our operating beliefs.</h2>
+      <ul>
+        <li><span>Don't sound generated.</span><em>01</em></li>
+        <li><span>Make people feel their body again.</span><em>02</em></li>
+        <li><span>Use technology without worshiping it.</span><em>03</em></li>
+        <li><span>Turn cultural fear into desire.</span><em>04</em></li>
+        <li><span>Build brands people would miss.</span><em>05</em></li>
+      </ul>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <div>
+        <div class="eyebrow" style="color:#c41414;">Begin</div>
+        <h2>Make your brand more human than the category around it.</h2>
+        <p>For founders, CMOs, and category leaders who believe the AI era is not just a technology shift — it is a humanity test.</p>
+        <a class="button" href="mailto:hello@dignity.co">hello@dignity.co</a>
+      </div>
+      <footer>
+        <span>Dignity © 2026</span>
+        <span>Strategy / Story / Human Differentiation</span>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // Lazy-load images with fallback: if Unsplash fails, gradient fallback stays visible
+    function loadImg(el, src, onLoad) {
+      const img = new Image();
+      img.onload = () => { onLoad(img); };
+      img.onerror = () => { /* fallback gradient stays */ };
+      img.src = src;
+    }
+
+    // Hero background
+    loadImg(null,
+      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1800&q=80',
+      () => {
+        const bg = document.getElementById('heroBg');
+        bg.style.backgroundImage = "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1800&q=80')";
+        bg.classList.add('loaded');
+      }
+    );
+
+    // Photo strip
+    const stripPhotos = [
+      { id: 'strip1', src: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=900&q=80' },
+      { id: 'strip2', src: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=900&q=80' },
+      { id: 'strip3', src: 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=900&q=80' },
+    ];
+    stripPhotos.forEach(({ id, src }) => {
+      const el = document.getElementById(id);
+      el.src = src;
+      el.onload = () => el.classList.add('loaded');
+    });
+
+    // Case card backgrounds
+    const cases = [
+      { id: 'case1bg', src: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1000&q=80' },
+      { id: 'case2bg', src: 'https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=1000&q=80' },
+    ];
+    cases.forEach(({ id, src }) => {
+      loadImg(null, src, () => {
+        const el = document.getElementById(id);
+        el.style.backgroundImage = `url('${src}')`;
+        el.classList.add('loaded');
+      });
+    });
+  </script>
+</body>
+</html>
